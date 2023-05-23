@@ -14,6 +14,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
+=======
+import java.util.Optional;
+>>>>>>> 2bdfb1f04501aa590db1ba98fa4f7868fb99c4e2
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 
@@ -49,15 +53,33 @@ public class AddTargetingGroupActivity {
     public AddTargetingGroupResponse addTargetingGroup(AddTargetingGroupRequest request) {
 
         String contentId = request.getContentId();
+
         List<com.amazon.ata.advertising.service.model.TargetingPredicate> requestedTargetingPredicates =
                 request.getTargetingPredicates();
         LOG.info(String.format("Adding targeting predicates [%s] to content with id: %s.",
                 requestedTargetingPredicates,
                 contentId));
 
+<<<<<<< HEAD
         List<TargetingPredicate> targetingPredicates = requestedTargetingPredicates.stream()
                 .map(TargetingPredicateTranslator::fromCoral)
                 .collect(Collectors.toList());
+=======
+//        List<TargetingPredicate> targetingPredicates = new ArrayList<>();
+//        if (requestedTargetingPredicates != null) {
+//            for (com.amazon.ata.advertising.service.model.TargetingPredicate targetingPredicate :
+//                requestedTargetingPredicates) {
+//                TargetingPredicate predicate = TargetingPredicateTranslator.fromCoral(targetingPredicate);
+//                targetingPredicates.add(predicate);
+//            }
+//        }
+
+        List<TargetingPredicate> targetingPredicates = Optional.ofNullable(requestedTargetingPredicates)
+                .map(predicates -> predicates.stream()
+                        .map(TargetingPredicateTranslator::fromCoral)
+                        .collect(Collectors.toList()))
+                        .orElse(new ArrayList<>());
+>>>>>>> 2bdfb1f04501aa590db1ba98fa4f7868fb99c4e2
 
         TargetingGroup targetingGroup = targetingGroupDao.create(contentId, targetingPredicates);
 
