@@ -13,6 +13,6 @@ public class GenerateAdActivityDagger implements RequestHandler<GenerateAdvertis
 
     @Override
     public GenerateAdvertisementResponse handleRequest(GenerateAdvertisementRequest generateAdvertisementRequest, Context context) {
-        return dagger.provideGenerateAdActivity().generateAd(generateAdvertisementRequest);
+        return dagger.provideGenerateAdActivity().handleRequest(generateAdvertisementRequest);
     }
 }

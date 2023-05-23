@@ -31,8 +31,10 @@ public class ContentDao implements ReadableDao<String, List<AdvertisementContent
      * @param marketplaceId The marketplace to get content for.
      * @return A list of all advertisement content that could be shown for ATA in this marketplace.
      */
+
     @Override
     public List<AdvertisementContent> get(String marketplaceId) {
+
         String encryptedMarketplace = EncryptionUtil.encryptMarketplaceId(marketplaceId);
         AdvertisementContent indexHashKey = AdvertisementContent.builder()
                 .withMarketplaceId(encryptedMarketplace)

@@ -1,5 +1,7 @@
 package com.amazon.ata.advertising.service.model;
 
+import com.amazon.ata.advertising.service.targeting.TargetingGroup;
+
 /**
  *  An extension of AdvertisementContent that has empty renderable content and a null id. This class is used as the
  *  content for an EmptyGeneratedAdvertisement.

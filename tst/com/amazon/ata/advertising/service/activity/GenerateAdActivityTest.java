@@ -52,7 +52,7 @@ public class GenerateAdActivityTest {
     @Test
     public void testGenerateAd_advertisementReturned() {
         when(adSelectionService.selectAdvertisement(CUSTOMER_ID, MARKETPLACE_ID)).thenReturn(GENERATED_ADVERTISEMENT);
-        final GenerateAdvertisementResponse response = activity.generateAd(REQUEST);
+        final GenerateAdvertisementResponse response = activity.handleRequest(REQUEST);
 
         assertNotNull(response.getAdvertisement());
         assertEquals(GENERATED_ADVERTISEMENT.getId(), response.getAdvertisement().getId());
@@ -62,7 +62,7 @@ public class GenerateAdActivityTest {
     @Test
     public void testGenerateAd_emptyAdvertisementReturned() {
         when(adSelectionService.selectAdvertisement(CUSTOMER_ID, MARKETPLACE_ID)).thenReturn(EMPTY_GENERATED_ADVERTISEMENT);
-        final GenerateAdvertisementResponse response = activity.generateAd(REQUEST);
+        final GenerateAdvertisementResponse response = activity.handleRequest(REQUEST);
 
         assertNotNull(response.getAdvertisement());
         assertEquals(EMPTY_GENERATED_ADVERTISEMENT.getId(), response.getAdvertisement().getId());
@@ -72,7 +72,7 @@ public class GenerateAdActivityTest {
     @Test
     public void whenExceptionThrown_emptyAdvertisementReturned() {
         when(adSelectionService.selectAdvertisement(CUSTOMER_ID, MARKETPLACE_ID)).thenThrow(new RuntimeException());
-        final GenerateAdvertisementResponse response = activity.generateAd(REQUEST);
+        final GenerateAdvertisementResponse response = activity.handleRequest(REQUEST);
 
         assertNotNull(response.getAdvertisement());
         assertEquals("", response.getAdvertisement().getContent());

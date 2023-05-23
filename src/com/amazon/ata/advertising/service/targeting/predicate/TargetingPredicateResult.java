@@ -5,6 +5,7 @@ package com.amazon.ata.advertising.service.targeting.predicate;
  * INDETERMINATE will be returned.
  */
 public enum TargetingPredicateResult {
+
     TRUE(true), FALSE(false), INDETERMINATE(false);
 
     private boolean isTrueResult;
