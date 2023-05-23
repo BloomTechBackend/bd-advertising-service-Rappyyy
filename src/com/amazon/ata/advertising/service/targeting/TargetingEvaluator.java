@@ -10,10 +10,9 @@ import java.util.List;
  * Evaluates TargetingPredicates for a given RequestContext.
  */
 public class TargetingEvaluator {
-<<<<<<< HEAD
-=======
 
->>>>>>> 2bdfb1f04501aa590db1ba98fa4f7868fb99c4e2
+
+
     public static final boolean IMPLEMENTED_STREAMS = true;
     public static final boolean IMPLEMENTED_CONCURRENCY = false;
     private final RequestContext requestContext;
@@ -36,24 +35,12 @@ public class TargetingEvaluator {
      */
     public TargetingPredicateResult evaluate(TargetingGroup targetingGroup) {
 
-<<<<<<< HEAD
-        List<TargetingPredicate> targetingPredicates = targetingGroup.getTargetingPredicates();
 
-        boolean allTruePredicates = targetingPredicates.stream()
-=======
-//        List<TargetingPredicate> targetingPredicates = targetingGroup.getTargetingPredicates();
-//        boolean allTruePredicates = true;
-//        for (TargetingPredicate predicate : targetingPredicates) {
-//            TargetingPredicateResult predicateResult = predicate.evaluate(requestContext);
-//            if (!predicateResult.isTrue()) {
-//                allTruePredicates = false;
-//                break;
-//            }
-//        }
+        List<TargetingPredicate> targetingPredicates = targetingGroup.getTargetingPredicates();
 
         boolean allTruePredicates = targetingGroup.getTargetingPredicates()
                 .stream()
->>>>>>> 2bdfb1f04501aa590db1ba98fa4f7868fb99c4e2
+
                 .map(predicate -> predicate.evaluate(requestContext))
                 .allMatch(TargetingPredicateResult::isTrue);
 
