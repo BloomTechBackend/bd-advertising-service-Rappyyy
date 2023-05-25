@@ -76,20 +76,32 @@ public class AdvertisementSelectionLogic {
             return new EmptyGeneratedAdvertisement();
         }
 
-         List<AdvertisementContent> contents = contentDao.get(marketplaceId);
-        List<TargetingGroup> targetingGroups = targetingGroupDao.get(marketplaceId);
+        List<AdvertisementContent> contents = contentDao.get(marketplaceId);
 
-        List<AdvertisementContent> eligibleAds = new ArrayList<>();
+//        List<AdvertisementContent> eligibleAds = new ArrayList<>();
         TargetingEvaluator targetingEvaluator = new TargetingEvaluator(new RequestContext(customerId, marketplaceId));
 
-        if (contents != null) {
-                    for(TargetingGroup targetingGroup : targetingGroups) {
-                        System.out.println("Hello");
-                                eligibleAds.addAll(contents.stream()
-                                .filter(ad -> targetingEvaluator.evaluate(targetingGroup).isTrue())
-                                .collect(Collectors.toList()));
+        List<AdvertisementContent> eligibleAds = new ArrayList<>(contents.stream().filter(content->{
+
+            if(content.getContentId()!= null){
+                List<TargetingGroup> targetingGroups = targetingGroupDao.get(content.getContentId());
+                for(TargetingGroup targetingGroup: targetingGroups){
+                    if(targetingEvaluator.evaluate(targetingGroup).isTrue()){
+                        return true;
                     }
-        }
+                }
+            }
+            return false;
+        }).collect(Collectors.toList()));
+
+//        if (contents != null) {
+//                    for(TargetingGroup targetingGroup : targetingGroups) {
+//                        System.out.println("Hello");
+//                                eligibleAds.addAll(contents.stream()
+//                                .filter(ad -> targetingEvaluator.evaluate(targetingGroup).isTrue())
+//                                .collect(Collectors.toList()));
+//                    }
+//        }
 
         System.out.println(eligibleAds.size());
 
@@ -100,6 +112,5 @@ public class AdvertisementSelectionLogic {
             return new GeneratedAdvertisement(ad);
         }
 
-        }
     }
-
+}
