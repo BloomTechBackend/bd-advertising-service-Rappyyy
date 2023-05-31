@@ -4,7 +4,12 @@ import com.amazon.ata.advertising.service.model.RequestContext;
 import com.amazon.ata.advertising.service.targeting.predicate.TargetingPredicate;
 import com.amazon.ata.advertising.service.targeting.predicate.TargetingPredicateResult;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Evaluates TargetingPredicates for a given RequestContext.
@@ -14,7 +19,7 @@ public class TargetingEvaluator {
 
 
     public static final boolean IMPLEMENTED_STREAMS = true;
-    public static final boolean IMPLEMENTED_CONCURRENCY = false;
+    public static final boolean IMPLEMENTED_CONCURRENCY = true;
     private final RequestContext requestContext;
 
     /**
@@ -36,14 +41,59 @@ public class TargetingEvaluator {
     public TargetingPredicateResult evaluate(TargetingGroup targetingGroup) {
 
 
-        List<TargetingPredicate> targetingPredicates = targetingGroup.getTargetingPredicates();
+//        List<TargetingPredicate> targetingPredicates = targetingGroup.getTargetingPredicates();
+//
+//        boolean allTruePredicates = targetingGroup.getTargetingPredicates()
+//                .stream()
+//
+//                .map(predicate -> predicate.evaluate(requestContext))
+//                .allMatch(TargetingPredicateResult::isTrue);
+//
+//        return allTruePredicates ? TargetingPredicateResult.TRUE : TargetingPredicateResult.FALSE;
+//    }
+        ExecutorService executorService = Executors.newCachedThreadPool();
 
-        boolean allTruePredicates = targetingGroup.getTargetingPredicates()
-                .stream()
+        List<Future<TargetingPredicateResult>> futures = new ArrayList<>();
 
-                .map(predicate -> predicate.evaluate(requestContext))
-                .allMatch(TargetingPredicateResult::isTrue);
+        List<TargetingPredicate> predicates = targetingGroup.getTargetingPredicates();
 
-        return allTruePredicates ? TargetingPredicateResult.TRUE : TargetingPredicateResult.FALSE;
+        predicates.stream()
+                .forEach(predicate -> {
+                    predicate.setRequestContext(requestContext);
+                    futures.add(executorService.submit(predicate));
+                });
+
+        executorService.shutdown();
+
+        boolean allTruePredicates = futures.stream()
+                .allMatch(future -> {
+                    try {
+                        return future.get().isTrue();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException("Process was interrupted!", e);
+                    } catch (ExecutionException e) {
+                        throw new RuntimeException("Error while executing threads!", e);
+                    }
+                });
+
+// Below was refactored to utilize threading for increased speed
+
+// boolean allTruePredicates = targetingGroup.getTargetingPredicates().stream()
+// .allMatch(i -> i.evaluate(requestContext).isTrue());
+//
+        return allTruePredicates ? TargetingPredicateResult.TRUE :
+                TargetingPredicateResult.FALSE;
+// Below was refactored to utilize a Stream for conciseness and increased readability
+
+// List<TargetingPredicate> targetingPredicates = targetingGroup.getTargetingPredicates();
+// boolean allTruePredicates = true;
+// for (TargetingPredicate predicate : targetingPredicates) {
+// TargetingPredicateResult predicateResult = predicate.evaluate(requestContext);
+// if (!predicateResult.isTrue()) {
+// allTruePredicates = false;
+// break;
+// }
+// }
     }
+
 }
