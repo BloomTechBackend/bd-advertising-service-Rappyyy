@@ -53,62 +53,7 @@ public class AdvertisementSelectionLogic {
      * @return an advertisement customized for the customer id provided, or an empty advertisement if one could
      *     not be generated.
      */
-//    public GeneratedAdvertisement selectAdvertisement(String customerId, String marketplaceId) {
-//
-////        GeneratedAdvertisement generatedAdvertisement = new EmptyGeneratedAdvertisement();
-////        if (StringUtils.isEmpty(marketplaceId)) {
-////            LOG.warn("MarketplaceId cannot be null or empty. Returning empty ad.");
-////        } else {
-////            final List<AdvertisementContent> contents = contentDao.get(marketplaceId);
-////
-////            if (CollectionUtils.isNotEmpty(contents)) {
-////                AdvertisementContent randomAdvertisementContent = contents.get(random.nextInt(contents.size()));
-////                generatedAdvertisement = new GeneratedAdvertisement(randomAdvertisementContent);
-////            }
-////
-////        }
-//
-//        if (StringUtils.isEmpty(marketplaceId)) {
-//            LOG.warn("MarketplaceId cannot be null or empty. Returning empty ad.");
-//            return new EmptyGeneratedAdvertisement();
-//        }
-//
-//        List<AdvertisementContent> contents = contentDao.get(marketplaceId);
-//
-////        List<AdvertisementContent> eligibleAds = new ArrayList<>();
-//        TargetingEvaluator targetingEvaluator = new TargetingEvaluator(new RequestContext(customerId, marketplaceId));
-//
-//        List<AdvertisementContent> eligibleAds = new ArrayList<>(contents.stream().filter(content->{
-//
-//            if(content.getContentId()!= null){
-//                List<TargetingGroup> targetingGroups = targetingGroupDao.get(content.getContentId());
-//                for(TargetingGroup targetingGroup: targetingGroups){
-//                    if(targetingEvaluator.evaluate(targetingGroup).isTrue()){
-//                        return true;
-//                    }
-//                }
-//            }
-//            return false;
-//        }).collect(Collectors.toList()));
-//
-////        if (contents != null) {
-////                    for(TargetingGroup targetingGroup : targetingGroups) {
-////                        System.out.println("Hello");
-////                                eligibleAds.addAll(contents.stream()
-////                                .filter(ad -> targetingEvaluator.evaluate(targetingGroup).isTrue())
-////                                .collect(Collectors.toList()));
-////                    }
-////        }
-//
-//        System.out.println(eligibleAds.size());
-//
-//        if (eligibleAds.size() == 0) {
-//            return new EmptyGeneratedAdvertisement();
-//        } else {
-//            AdvertisementContent ad = eligibleAds.get(random.nextInt(eligibleAds.size()));
-//            return new GeneratedAdvertisement(ad);
-//        }
-//    }
+
     public GeneratedAdvertisement selectAdvertisement(String customerId, String marketplaceId) {
 
         if (StringUtils.isEmpty(marketplaceId)) {
