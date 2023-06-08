@@ -117,7 +117,8 @@ public class AdvertisementSelectionLogic {
 
         TargetingEvaluator targetingEvaluator = new TargetingEvaluator(new RequestContext(customerId, marketplaceId));
 
-        TreeMap<Double, AdvertisementContent> eligibleAds = new TreeMap<>(Comparator.reverseOrder());
+
+        TreeMap<Double, AdvertisementContent> eligibleAds = new TreeMap<>(Collections.reverseOrder());
 
         for (AdvertisementContent content : contents) {
             if (content.getContentId() != null) {
